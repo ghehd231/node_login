@@ -3,8 +3,10 @@ const expressLayout = require('express-ejs-layouts');
 const mongoose = require('mongoose');
 const flash = require('connect-flash');
 const session = require('express-session');
+const passport = require('passport');
 const app = express();
 
+require('./config/passport')(passport);
 //db
 const db = require('./config/keys').mongoURI;
 
@@ -23,6 +25,8 @@ app.use(session({
     saveUninitialized: true
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
 
 // Global Vars

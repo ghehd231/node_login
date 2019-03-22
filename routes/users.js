@@ -2,12 +2,28 @@ const express = require('express');
 const router = express.Router();
 const User = require('../model/users');
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
 
+
+router.get('/logout', (req, res, next) => {
+    req.logout();
+    req.flash('success_msg','You are logged out');
+    res.redirect('/users/login');
+});
 
 router.get('/login', (req, res, next) => {
     //res.send('routes/users.js => login');
     res.render('login');
 });
+
+router.post('/login', (req, res, next) => {
+    passport.authenticate('local', {
+        successRedirect: '/dashboard', //성공하면 대쉬보드로
+        failureRedirect: '/users/login', //실패하면 다시 로그인 화면으로
+        failureFlash: true
+    })(req, res, next);
+});
+
 
 router.get('/register', (req, res, next) => {
    // res.send('routes/users.js => register');
